@@ -1,20 +1,26 @@
 "use client";
 
 import { redirect, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
-export default function Result() {
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+function ResultMain() {
+  const [windowHeight, setWindowHeight] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(null);
   const searchParams = useSearchParams();
   const gameId = searchParams.get("gameId");
   const [resultExists, setResultExists] = useState(false);
 
+  const setWindow = () => {
+    setWindowHeight(window.innerHeight);
+    setWindowWidth(window.innerWidth);
+  }
+
   useEffect(() => {
+    setWindow();
+
     window.addEventListener('resize', () => {
-      setWindowHeight(window.innerHeight);
-      setWindowWidth(window.innerWidth);
+      setWindow();
     });
   }, []);
 
@@ -44,10 +50,20 @@ export default function Result() {
             <div className="p-0 col-6 text-end">score</div>
             <div className="p-0 col-6"><img alt="screenshot5"></img></div>
             <div className="p-0 col-6 text-end">score</div>
+            <div className="p-0 col-6">total</div>
+            <div className="p-0 col-6 text-end">score</div>
           </div>
           <div className="text-center"><Link className="btn" href="/">TOP</Link><Link className="btn" href="/game">RETRY</Link></div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Result() {
+  return (
+    <Suspense>
+      <ResultMain></ResultMain>
+    </Suspense>
   );
 }

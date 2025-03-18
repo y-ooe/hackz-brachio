@@ -4,13 +4,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  
+  const [windowHeight, setWindowHeight] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(null);
+
+  const setWindow = () => {
+    setWindowHeight(window.innerHeight);
+    setWindowWidth(window.innerWidth);
+  }
+
   useEffect(() => {
+    setWindow();
+
     window.addEventListener('resize', () => {
-      setWindowHeight(window.innerHeight);
-      setWindowWidth(window.innerWidth);
+      setWindow();
     });
   }, []);
   

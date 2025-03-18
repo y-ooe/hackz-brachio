@@ -55,17 +55,23 @@ const fileUpload = async (image) => {
 }
 
 export default function Game() {
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowHeight, setWindowHeight] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(null);
   const router = useRouter();
   const webcamRef = useRef(null);
   const [gameStarted, setGameStarted] = useState(false);
   const [seconds, setSeconds] = useState(23);
+  
+  const setWindow = () => {
+    setWindowHeight(window.innerHeight);
+    setWindowWidth(window.innerWidth);
+  }
 
   useEffect(() => {
+    setWindow();
+
     window.addEventListener('resize', () => {
-      setWindowHeight(window.innerHeight);
-      setWindowWidth(window.innerWidth);
+      setWindow();
     });
   }, []);
 
