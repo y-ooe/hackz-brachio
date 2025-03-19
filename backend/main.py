@@ -97,9 +97,9 @@ async def get_result(id: str):
                 matches = bf.match(akaze1,akaze2)
                 distan = [m.distance for m in matches]
                 ret = sum(distan) / len(distan)
-                print(i, j, ret)
-                json_data[i]["Score"] *= ret
-                json_data[j]["Score"] *= ret
+                # print(i, j, ret)
+                json_data[i]["Score"] = round(json_data[i]["Score"]*ret/50, 3)
+                json_data[j]["Score"] = round(json_data[j]["Score"]*ret/50, 3)
 
         return json_data
     

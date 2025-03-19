@@ -15,7 +15,7 @@ const videoConstraints = {
   facingMode: "user"
 };
 
-const decodeBase64toJpg = (image) => {
+const decodeBase64toJpg = (gameId, image) => {
   const blob = atob(image.replace(/^.*,/, ''));
   let buffer = new Uint8Array(blob.length);
   for (let i = 0; i < blob.length; i++) {
@@ -60,7 +60,7 @@ export default function Game() {
   const router = useRouter();
   const webcamRef = useRef(null);
   const [gameStarted, setGameStarted] = useState(false);
-  const [seconds, setSeconds] = useState(23);
+  const [seconds, setSeconds] = useState(25);
   
   const setWindow = () => {
     setWindowHeight(window.innerHeight);
@@ -80,7 +80,7 @@ export default function Game() {
    */
   const capture = useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    const image = decodeBase64toJpg(imageSrc);
+    const image = decodeBase64toJpg(gameId, imageSrc);
   
     console.log(image);
     fileUpload(image);
@@ -90,15 +90,15 @@ export default function Game() {
    * タイマー
    */
   useEffect(() => {
-    if (seconds >= 0 && gameStarted) {
+    if (seconds >= -2 && gameStarted) {
       const timerId = setTimeout(() => setSeconds(seconds - 1), 1000);
-      if (seconds % 4 == 0 && seconds < 20) {
+      if ((seconds-2) % 4 == 0 && (seconds-2) < 20) {
         console.log("capture");
         capture();
       }
       
       // 終了時resultに遷移
-      console.log(seconds);
+      console.log(seconds-2);
       if (seconds == 0) {
         router.push(`/result?gameId=${gameId}`);
       }
@@ -121,7 +121,7 @@ export default function Game() {
           >
           </Webcam>
           {gameStarted
-            ? <div className="text-center">{seconds == 20 ? 'START' : seconds % 4}</div>
+            ? <div className="text-center">{(seconds-2) == 20 ? 'START' : (seconds-2) % 4}</div>
             : <button className="btn" onClick={() => {setGameStarted(true)}}>READY</button>
           }
         </div>
